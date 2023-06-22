@@ -1,0 +1,52 @@
+<html>
+
+<head>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@2.51.6/dist/full.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<script defer>
+  document.addEventListener("DOMContentLoaded", function () {
+    const generateBtn = document.getElementById("generate-pdf");
+    const downloadBtn = document.getElementById("pdf-download");
+
+    generateBtn.addEventListener("click", async function () {
+      generateBtn.classList.add("loading");
+      const result = await fetch('/generate', {
+        keepalive: true,
+      });
+
+      if (result.status === 200) {
+        generateBtn.classList.remove("loading");
+        downloadBtn.classList.remove("hidden");
+      }
+    });
+  });
+</script>
+
+<body class="container m-auto pt-16 px-12">
+  <div class="mb-4">
+    <a href="/" class="link">&leftarrow; Go back</a>
+  </div>
+  <h2 class="text-xl mb-2">Result</h2>
+  <h1 class="mb-16 text-blue-600 text-3xl">Score: {{ score }} </h1>
+  <div class="h-full grid grid-cols-2 gap-12">
+    <div>
+      <ul>
+        {% for item in resources.meta %}
+        <li class="mb-4"><span class="font-bold">{{ item.label }}</span> - {{ item.value }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="flex gap-4 w-full">
+      <button id="generate-pdf" class="btn">
+        Generate PDF
+      </button>
+      <a href="/pdf-result" target="_blank">
+        <button id="pdf-download" class="btn hidden">download pdf</button>
+      </a>
+    </div>
+  </div>
+</body>
+
+</html>
